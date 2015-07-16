@@ -136,7 +136,7 @@ Example: natural numbers.
 
 BNF-like syntax:
 
-< nat := 0 | 'S' nat
+< nat := '0' | 'S' nat
 
 Specification: Peano axioms.
 
@@ -167,9 +167,9 @@ that corresponds to |S|:
 
 > type NatAlg a  =  (a, a -> a)
 
-> eval                 :  Nat -> NatAlg a -> a
-> eval  Z      (z, s)  =  z
-> eval  (S n)  (z, s)  =  s (eval n (z, s))
+> eval :  Nat ->  NatAlg a  ->  a
+> eval    Z       (z, s)    =   z
+> eval    (S n)   (z, s)    =   s (eval n (z, s))
 
 The previous, ``canonical'' semantics:
 
@@ -188,16 +188,18 @@ Example: monoid.
 
 Haskell-like representation of the syntax:
 
-> data MonSyn var  =  Z | var | Plus (Mon var) (Mon var)
+> data MonSyn var  =  Z | Plus (MonSyn var) (MonSyn var) | V var
 
 > type MonAlg a    =  (a, a -> a -> a)
 
 > type Dict var a  =  var -> a -- partial!
 
 > eval : MonSyn var -> MonAlg a -> Dict var a -> a
-> eval Z (z, plus) dict  =  z
-> eval x (z, plus) dict  =  dict x
-> eval (Plus x1 x2)      =  (eval x1) `plus` (eval x2)
+> eval e (z, plus) dict  = eval' e
+>   where
+>     eval' Z             =  z
+>     eval' (Plus x1 x2)  =  (eval' x1) `plus` (eval' x2)
+>     eval' (V x)         =  dict x
 
 \vfill
 \end{frame}
@@ -218,7 +220,7 @@ counterparts.
 Consider:
 
 < f x           =  x - x
-< ext f [a, b]  =  [a, b] - [a, b] 
+< ext f [a, b]  =  [a, b] - [a, b]
 <               =  [a - b, b - a]
 
 < g x           =  0
@@ -245,7 +247,7 @@ Consider:
 \item power series: |powseries|
 \end{itemize}
 
-The syntax is always given by a function |a : Nat -> X|, but the
+The ``syntax'' is always given by a function |a : Nat -> X|, but the
 evaluation (semantics) is very different.
 
 
@@ -278,10 +280,10 @@ Different syntaxes:
 \vfill
 Yet the semantics is the same: |CC|
 \vfill
-Other examples: optimisation vs. equations, differentiability
-vs. Taylor series in the complex plane.
+Other examples: optimisation vs.\ equations, differentiability
+vs.\ Taylor series in the complex plane.
 \vfill
-Non-mathematical example: *roff vs. tex vs. html
+Non-mathematical example: *roff vs.\ tex vs.\ html
 
 \vfill
 \end{frame}
@@ -347,8 +349,8 @@ Let |X included Real, a elemOf X| and |f : X -> Real|.  If there
 exists a function |phif : X -> X -> Real| such that, for all |x elemOf
 X|
 
-< f x = f a + (x - a) * phif a x 
-  
+< f x = f a + (x - a) * phif a x
+
 \underline{such that |phif a : X -> Real| continuous at |a|}, then |f| is
 {\bfseries differentiable} at |x|.  The value |phif a a| is called the
 {\bfseries derivative} of |f| at |a| and is denoted |f' a|.
@@ -382,7 +384,7 @@ X|
 = {- arithmetic -}
 
    f a * g a  +
-   (x - a)  *  (g a  *  phif a x  + 
+   (x - a)  *  (g a  *  phif a x  +
                         phig a x  *  (f a + (x - a) * phif a x)
 \end{spec}
 \gap
@@ -390,7 +392,7 @@ X|
 = {- differentiability of |f| -}
 
    f a * g a  +
-   (x - a)    *  (g a  *  phif a x  +  phig a x  *  f x)
+   (x - a)   *  (g a  *  phif a x  +  phig a x  *  f x)
 \end{spec}
 \gap
 \begin{spec}
@@ -401,9 +403,9 @@ X|
 \gap
 \begin{spec}
 => {- continuity of composition, differentiability -}
-  
+
    h' a = phih a a = g a * f' a + g' a * f a
- 
+
 \end{spec}
 
 \vfill

@@ -56,3 +56,4 @@
 %format series                  =  "\sum\limits_{n = 0}^{\infty} a_n"
 %format powseries               =  "\sum\limits_{n = 0}^{\infty} a_n * x^n"
 %format theta                   =  "\theta"
+%format <=>                     =  "\Longleftrightarrow"

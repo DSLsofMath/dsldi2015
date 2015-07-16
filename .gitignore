@@ -1,0 +1,17 @@
+*~
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pag
+*.ptb
+*.nav
+*.snm
+*.toc
+*.vrb
+slides.tex
+slides.pdf
