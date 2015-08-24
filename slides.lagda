@@ -368,7 +368,7 @@ X|
 \small
 \def\commentbegin{\quad\{\ }
 \def\commentend{\}}
-\newcommand{\gap}{\pause\vspace{-0.8cm}}
+\newcommand{\gap}{\pause\vspace{-0.7cm}}
 \begin{spec}
    (f x) * (g x)
 \end{spec}
@@ -376,34 +376,38 @@ X|
 \begin{spec}
 = {- differentiability -}
 
-   (f a + (x - a) * phif a x) *
-   (g a + (x - a) * phig a x) *
+   (f a + (x - a) * phif a x) * (g a + (x - a) * phig a x) 
 \end{spec}
 \gap
 \begin{spec}
 = {- arithmetic -}
 
-   f a * g a  +
-   (x - a)  *  (g a  *  phif a x  +
-                        phig a x  *  (f a + (x - a) * phif a x)
+   f a * g a                              +  {-"\quad"-}  f a * (x - a) * phig a x  +
+   (x - a) * phif a x * g a  {-"\quad"-}  +  {-"\quad"-}  (x - a) * phif a x * (x - a) * phig a x
+\end{spec}
+%   (x - a)  *  (g a  *  phif a x  +
+%%                        phig a x  *  (f a + (x - a) * phif a x))
+\gap
+\begin{spec}
+= {- factor out |(x - a)| to get |h a + (x - a) * phih a x| -}
+
+   f a * g a  +  (x - a)  *  (f a * phig a x  +  phif a x * g a  +  
+                              phif a x * (x - a) * phig a x)
 \end{spec}
 \gap
 \begin{spec}
-= {- differentiability of |f| -}
+= {- ``pattern-matching'' -}
 
-   f a * g a  +
-   (x - a)   *  (g a  *  phif a x  +  phig a x  *  f x)
+   h a + (x - a) * phih a x 
+     where  h x       =  f x * g x
+            phih a x  =  f a * phig a x  +  phif a x * g a  +  
+                         phif a x * (x - a) * phig a x
 \end{spec}
-\gap
-\begin{spec}
-= {- ``pattern-matching'': |h = f * g| and |phih| -}
+\pause
+%
+Therefore, by continuity of composition and differentiability:
 
-   h a + (x - a) * phih a x
-\end{spec}
-\gap
 \begin{spec}
-=> {- continuity of composition, differentiability -}
-
    h' a = phih a a = g a * f' a + g' a * f a
 
 \end{spec}
